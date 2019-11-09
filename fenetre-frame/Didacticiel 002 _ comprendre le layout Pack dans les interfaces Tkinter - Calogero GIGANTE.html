@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0043)http://www.gigante.be/python/didact_002.php -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="keywords" content="python, programmation, open-source, didacticiels">
+<meta name="description" content="Le site d&#39;un amateur intégralement consacré au langage open-source orienté objet Python">
+
+<link href="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/zstyle.css" rel="stylesheet" type="text/css" media="screen">
+<title>Didacticiel 002 : comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE</title>
+
+<script type="text/javascript" src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/shCore.js"></script>
+<script type="text/javascript" src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/shBrushPython.js"></script>
+<link type="text/css" rel="stylesheet" href="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/shCore.css">
+<link type="text/css" rel="stylesheet" href="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/shThemeDefault.css">
+<script type="text/javascript">
+SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
+SyntaxHighlighter.all();
+</script>
+
+</head>
+
+<body>
+<div id="wrapper">
+  	<div id="header">
+		<div id="logo">
+			<h1><a href="http://www.gigante.be/python/index.php">La Caverne du python</a></h1>
+			<p> Une petite caverne de ressources consacrées au fabuleux langage Python</p>
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="menu">
+  		<ul>
+			<li class="current_page_item"><a href="http://www.gigante.be/python/index.php">Accueil</a></li>
+			<li><a href="http://www.gigante.be/python/section_didacticiels.php">Didacticiels</a></li>
+			<li><a href="http://www.gigante.be/python/section_programmes.php">Programmes complets</a></li>
+			<li><a href="http://www.gigante.be/python/section_trucs.php">Trucs &amp; astuces</a></li>
+			<li><a href="http://www.gigante.be/python/section_livres.php">Livres</a></li>
+			<li><a href="http://www.gigante.be/python/section_apropos.php">A propos</a></li>
+			<li><a href="http://www.gigante.be/">retour sur GIGANTE.BE</a></li>
+		</ul>
+	</div>
+	<!-- end #menu -->
+	<div id="page">
+	<div id="page-bgtop">
+	<div id="page-bgbtm">
+		<div id="content">
+
+			<div class="post">
+			<div class="post-bgtop">
+			<div class="post-bgbtm">
+				<h2 class="title">Comprendre le layout Pack dans les interfaces Tkinter</h2>
+				<p class="meta">Posté par <a href="">C. Gigante</a> le 21 janvier 2010
+					&nbsp;•&nbsp; <a href="" class="comments">Commentaires (0)</a> &nbsp;•&nbsp; <a href="" class="permalink">&nbsp;</a></p>
+				<div class="entry">
+
+<h1>Comprendre le layout Pack dans les interfaces Tkinter</h1>
+
+<h2>1) A propos des Geometry Manager</h2>
+
+<p>
+Tkinter contient trois types de gestionnaire (= Geometry Manager) pour positionner
+les éléments d'une interface graphique. Je les nomme : il s'agit de <b>Grid</b>, <b>Pack</b>
+et <b>Place</b>.
+</p>
+
+<p>
+Contrairement à ce qu'on peut lire dans de nombreux forums sur Python, il est tout à fait
+permis d'utiliser PLUSIEURS gestionnaires de positionnement différent dans une même
+application avec Tkinter. Sans ça, je ne vois d'ailleurs pas comment on pourrait faire
+des interfaces plus ou moins sophistiquées... C'est tout bonnement impossible.
+</p>
+
+<p>
+C'est seulement au sein d'un même élément "conteneur" (c-à-d capable de recevoir des éléments : boutons, listbox, etc...),
+qu'il faut rester impérativement dans le Geometry Manager choisi. Donc, on peut tout à fait avoir un conteneur
+utilisant <b>Grid()</b> pour positionner ses propres enfants directs, disposé juste
+à côté d'un conteneur utilisant <b>Pack()</b> pour ses enfants à lui, et cela au sein
+de la même application. C'est ce que je vais illustrer dans ce didacticiel par un exemple
+très simple, et détaillé pas à pas.
+</p>
+
+<p>
+Le conteneur par excellence est l'élément <b>Frame()</b>.
+</p>
+
+<h2>2) Comment fonctionne réellement Pack ?</h2>
+
+<p>
+Dans ce didacticiel, je vais surtout vous montrer comment fonctionne Pack(), qui m'a
+un peu donné mal à la tête lors de mes premières tentatives pour le comprendre et l'utiliser
+correctement. Si j'avais eu connaissance autrefois des explications qui vont suivre,
+j'aurais gagné beaucoup de temps dans la création et la conception des interfaces de mes programmes.
+</p>
+
+<p>
+Pack fonctionne en réalité en utilisant ce que j'appelerais "la cavité restante". Lançons-nous
+dans notre exemple simple.
+</p>
+
+<div id="highlighter_15144" class="syntaxhighlighter  "><div class="bar"><div class="toolbar"><a href="http://www.gigante.be/python/didact_002.php#viewSource" title="view source" class="item viewSource" style="width: 16px; height: 16px;">view source</a><div class="item copyToClipboard"><embed width="16" height="16" id="highlighter_15144_clipboard" type="application/x-shockwave-flash" title="copy to clipboard" allowscriptaccess="always" wmode="transparent" flashvars="highlighterId=highlighter_15144" menu="false" src="scripts/clipboard.swf"></div><a href="http://www.gigante.be/python/didact_002.php#printSource" title="print" class="item printSource" style="width: 16px; height: 16px;">print</a><a href="http://www.gigante.be/python/didact_002.php#about" title="?" class="item about" style="width: 16px; height: 16px;">?</a></div></div><div class="lines"><div class="line alt1"><table><tbody><tr><td class="number"><code>01</code></td><td class="content"><code class="comments">#!/usr/local/bin/python</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>02</code></td><td class="content"><code class="comments"># -*- coding:utf-8 -*-</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>03</code></td><td class="content"><code class="keyword">from</code> <code class="plain">Tkinter </code><code class="keyword">import</code> <code class="keyword">*</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>04</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>05</code></td><td class="content"><code class="plain">application </code><code class="keyword">=</code> <code class="plain">Tk()</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>06</code></td><td class="content"><code class="plain">application.title(</code><code class="string">"Pack testeur"</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>07</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>08</code></td><td class="content"><code class="plain">frame1 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"yellow"</code><code class="plain">, width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, padx</code><code class="keyword">=</code><code class="value">10</code><code class="plain">, pady</code><code class="keyword">=</code><code class="value">10</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>09</code></td><td class="content"><code class="plain">frame1.pack(side</code><code class="keyword">=</code><code class="plain">RIGHT,fill</code><code class="keyword">=</code><code class="plain">Y)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>10</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>11</code></td><td class="content"><code class="comments"># il reste la cavité sur la gauche...</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>12</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>13</code></td><td class="content"><code class="plain">application.mainloop()</code></td></tr></tbody></table></div></div></div>
+
+<p>
+Nous obtenons une fenêtre qui affiche un frame carré de 300 pixels de côté. Normal !
+Nous avons spécifié les dimensions voulues de ce Frame lors de sa création à la ligne 08.
+Grâce au schéma ci-dessous, je peux commencer à vous expliquer clairement ce qui se passe.
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_01.png" class="middle" alt="">
+</p>
+
+<p>
+Nous avons créé le <b>frame1</b>, et nous lui avons demandé de se mettre dans l'espace libre
+situé à droite (side=RIGHT) de sa fenêtre parente, càd <b>application = Tk()</b>. Ensuite, nous
+avons spécifié qu'il doit remplir l'espace qui lui a été attribué en s'étalant suivant l'axe
+des Y. C'est ce qui est symbolisé par les deux flèches rouges dans le schéma ci-dessus.
+</p>
+
+<p>
+Lorsqu'on fait appel à pack(), Tkinter compacte la fenêtre pour épouser au mieux la
+forme des éléments qu'elle contient. Comme il n'y a qu'un frame présent, la fenêtre générale
+épouse la forme de <b>frame1</b>. Maintenant, vous pouvez faire le test intéressant d'agrandir la
+fenêtre (exemple en la maximisant), vous verrez que Tkinter a bien placé <b>frame1</b> dans une zone
+à droite, et qu'il l'étend suivant l'axe des Y, comme expliqué ci-dessus.
+</p>
+
+<p>
+Il faut maintenant considérer la cavité restante. Il faut bien comprendre que le prochain ajout
+d'un widget dans la fenêtre application se fera par rapport à cette cavité restante. C'est
+comme si on pouvait "oublier" qu'on a positionné <b>frame1</b> à droite. Seul compte maintenant pour
+la suite la surface (limitée en pointillés dans le schéma) représentée par la cavité restante.
+</p>
+
+
+<h3>Principe général :</h3>
+
+<p>
+En fait, avec Pack(), chaque futur ajout d'un widget (que ce soit un conteneur ou non) se fera suivant une
+des 4 options illustrées ci-dessous. On "tranche" en quelque sorte la cavité restante, pour
+donner naissance à une nouvelle cavité restante, qui subira à nouveau le même schéma au prochain
+ajout d'un élément.
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/cavites.png" class="middle" alt="">
+</p>
+
+<p>
+Il faut aussi noter que les zones situées dans la tranche de part et d'autre du widget (cf
+zones en vert dans le schéma ci-dessus) peuvent rester inutilisées ou non, en fonction de l'expansion
+spécifiée au widget nouvellement inséré (cf options <b>fill</b> et <b>expand</b>).
+</p>
+
+<p>
+Ajoutons maintenant notre deuxième frame :
+</p>
+
+<div id="highlighter_38729" class="syntaxhighlighter  "><div class="bar"><div class="toolbar"><a href="http://www.gigante.be/python/didact_002.php#viewSource" title="view source" class="item viewSource" style="width: 16px; height: 16px;">view source</a><div class="item copyToClipboard"><embed width="16" height="16" id="highlighter_38729_clipboard" type="application/x-shockwave-flash" title="copy to clipboard" allowscriptaccess="always" wmode="transparent" flashvars="highlighterId=highlighter_38729" menu="false" src="scripts/clipboard.swf"></div><a href="http://www.gigante.be/python/didact_002.php#printSource" title="print" class="item printSource" style="width: 16px; height: 16px;">print</a><a href="http://www.gigante.be/python/didact_002.php#about" title="?" class="item about" style="width: 16px; height: 16px;">?</a></div></div><div class="lines"><div class="line alt1"><table><tbody><tr><td class="number"><code>01</code></td><td class="content"><code class="comments">#!/usr/local/bin/python</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>02</code></td><td class="content"><code class="comments"># -*- coding:utf-8 -*-</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>03</code></td><td class="content"><code class="keyword">from</code> <code class="plain">Tkinter </code><code class="keyword">import</code> <code class="keyword">*</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>04</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>05</code></td><td class="content"><code class="plain">application </code><code class="keyword">=</code> <code class="plain">Tk()</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>06</code></td><td class="content"><code class="plain">application.title(</code><code class="string">"Pack testeur"</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>07</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>08</code></td><td class="content"><code class="plain">frame1 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"yellow"</code><code class="plain">, width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, padx</code><code class="keyword">=</code><code class="value">10</code><code class="plain">, pady</code><code class="keyword">=</code><code class="value">10</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>09</code></td><td class="content"><code class="plain">frame1.pack(side</code><code class="keyword">=</code><code class="plain">RIGHT,fill</code><code class="keyword">=</code><code class="plain">Y)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>10</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>11</code></td><td class="content"><code class="comments"># il reste la cavité sur la gauche...</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>12</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>13</code></td><td class="content"><code class="plain">frame2 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"blue"</code><code class="plain">,&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>14</code></td><td class="content"><code class="plain">frame2.pack(side</code><code class="keyword">=</code><code class="plain">TOP, fill</code><code class="keyword">=</code><code class="plain">X)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>15</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>16</code></td><td class="content"><code class="comments"># il reste une cavité en bas à gauche...</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>17</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>18</code></td><td class="content"><code class="plain">application.mainloop()</code></td></tr></tbody></table></div></div></div>
+
+<p>
+Le schéma ci-dessous va encore une fois nous aider à éclaircir ce qui s'est passé.
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_02.png" class="middle" alt="">
+</p>
+
+<p>
+Le nouveau Frame <b>frame2</b> est allé se placer en haut de la cavité restante (cf side=TOP), et nous lui
+avons dit qu'il peut remplir tout l'espace suivant l'axe des X (voir les flèches rouges). Le principe
+est toujours le même, il reste maintenant une nouvelle cavité restante qui est en quelque sorte
+placée en bas à gauche de la fenêtre générale <b>application</b>.
+</p>
+
+<p>
+C'est cette "nouvelle" cavité restante qu'il faut maintenant considérer par rapport
+à l'ajout du prochain élément direct de notre fenêtre principale <b>application = Tk()</b>. Ajoutons
+donc le 3ème frame :
+</p>
+
+<div id="highlighter_282879" class="syntaxhighlighter  "><div class="bar"><div class="toolbar"><a href="http://www.gigante.be/python/didact_002.php#viewSource" title="view source" class="item viewSource" style="width: 16px; height: 16px;">view source</a><div class="item copyToClipboard"><embed width="16" height="16" id="highlighter_282879_clipboard" type="application/x-shockwave-flash" title="copy to clipboard" allowscriptaccess="always" wmode="transparent" flashvars="highlighterId=highlighter_282879" menu="false" src="scripts/clipboard.swf"></div><a href="http://www.gigante.be/python/didact_002.php#printSource" title="print" class="item printSource" style="width: 16px; height: 16px;">print</a><a href="http://www.gigante.be/python/didact_002.php#about" title="?" class="item about" style="width: 16px; height: 16px;">?</a></div></div><div class="lines"><div class="line alt1"><table><tbody><tr><td class="number"><code>01</code></td><td class="content"><code class="comments">#!/usr/local/bin/python</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>02</code></td><td class="content"><code class="comments"># -*- coding:utf-8 -*-</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>03</code></td><td class="content"><code class="keyword">from</code> <code class="plain">Tkinter </code><code class="keyword">import</code> <code class="keyword">*</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>04</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>05</code></td><td class="content"><code class="plain">application </code><code class="keyword">=</code> <code class="plain">Tk()</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>06</code></td><td class="content"><code class="plain">application.title(</code><code class="string">"Pack testeur"</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>07</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>08</code></td><td class="content"><code class="plain">frame1 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"yellow"</code><code class="plain">, width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, padx</code><code class="keyword">=</code><code class="value">10</code><code class="plain">, pady</code><code class="keyword">=</code><code class="value">10</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>09</code></td><td class="content"><code class="plain">frame1.pack(side</code><code class="keyword">=</code><code class="plain">RIGHT,fill</code><code class="keyword">=</code><code class="plain">Y)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>10</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>11</code></td><td class="content"><code class="comments"># il reste la cavité sur la gauche...</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>12</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>13</code></td><td class="content"><code class="plain">frame2 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"blue"</code><code class="plain">,&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>14</code></td><td class="content"><code class="plain">frame2.pack(side</code><code class="keyword">=</code><code class="plain">TOP, fill</code><code class="keyword">=</code><code class="plain">X)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>15</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>16</code></td><td class="content"><code class="comments"># il reste une cavité en bas à gauche...</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>17</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>18</code></td><td class="content"><code class="plain">frame3 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"red"</code><code class="plain">,&nbsp;&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>19</code></td><td class="content"><code class="plain">frame3.pack(side</code><code class="keyword">=</code><code class="plain">BOTTOM, fill</code><code class="keyword">=</code><code class="plain">BOTH, expand</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>20</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>21</code></td><td class="content"><code class="plain">application.mainloop()</code></td></tr></tbody></table></div></div></div>
+
+<p>
+Et nous obtenons visuellement ceci :
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_03.png" class="middle" alt="">
+</p>
+
+<p>Le <b>frame3</b> est allé se placer en bas de la cavité. Mais si nous maximisons
+la fenêtre, nous voyons que ce <b>frame3</b> rouge prend dorénavant tout l'espace restant.
+Pourquoi ? Rien ne vaut encore un schéma supplémentaire pour bien comprendre :</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_04.png" class="middle" alt="">
+</p>
+
+<p>
+Nous avons en effet donné à <b>frame3</b> les caractéristiques suivantes : fill=BOTH
+et expand=1. Ce qui veut dire que nous donnons à ce frame l'autorisation de remplir
+SA cavité dans les deux sens X et Y, et nous lui donnons aussi l'injonction de
+s'étendre impérativement avec expand=1 (ce qui est possible seulement si la cavité
+restante ne contient pas de widget en fait).
+</p>
+
+<p>
+Donc, dans ce cas, la cavité restante est TOUJOURS présente, mais est sans cesse réduite
+à une surface nulle, car le <b>frame3</b> cherche à s'étendre tant que c'est possible !
+</p>
+
+<p>
+Continuons notre investigation en ajoutant encore un 4ème frame : <b>frame4</b> pour
+terminer notre initiation à pack(). On peut déjà prédire que, quelle que soit l'option side
+que nous donnerons à <b>frame4</b>, celui-ci sera OBLIGATOIREMENT pris en sandwish
+entre <b>frame2</b> et <b>frame3</b>, par le fait que la cavité restante est ainsi
+positionnée.
+</p>
+
+<div id="highlighter_816784" class="syntaxhighlighter  "><div class="bar"><div class="toolbar"><a href="http://www.gigante.be/python/didact_002.php#viewSource" title="view source" class="item viewSource" style="width: 16px; height: 16px;">view source</a><div class="item copyToClipboard"><embed width="16" height="16" id="highlighter_816784_clipboard" type="application/x-shockwave-flash" title="copy to clipboard" allowscriptaccess="always" wmode="transparent" flashvars="highlighterId=highlighter_816784" menu="false" src="scripts/clipboard.swf"></div><a href="http://www.gigante.be/python/didact_002.php#printSource" title="print" class="item printSource" style="width: 16px; height: 16px;">print</a><a href="http://www.gigante.be/python/didact_002.php#about" title="?" class="item about" style="width: 16px; height: 16px;">?</a></div></div><div class="lines"><div class="line alt1"><table><tbody><tr><td class="number"><code>01</code></td><td class="content"><code class="comments">#!/usr/local/bin/python</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>02</code></td><td class="content"><code class="comments"># -*- coding:utf-8 -*-</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>03</code></td><td class="content"><code class="keyword">from</code> <code class="plain">Tkinter </code><code class="keyword">import</code> <code class="keyword">*</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>04</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>05</code></td><td class="content"><code class="plain">application </code><code class="keyword">=</code> <code class="plain">Tk()</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>06</code></td><td class="content"><code class="plain">application.title(</code><code class="string">"Pack testeur"</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>07</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>08</code></td><td class="content"><code class="plain">frame1 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"yellow"</code><code class="plain">, width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, padx</code><code class="keyword">=</code><code class="value">10</code><code class="plain">, pady</code><code class="keyword">=</code><code class="value">10</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>09</code></td><td class="content"><code class="plain">frame1.pack(side</code><code class="keyword">=</code><code class="plain">RIGHT,fill</code><code class="keyword">=</code><code class="plain">Y)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>10</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>11</code></td><td class="content"><code class="comments"># il reste la cavité sur la gauche...</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>12</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>13</code></td><td class="content"><code class="plain">frame2 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"blue"</code><code class="plain">,&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>14</code></td><td class="content"><code class="plain">frame2.pack(side</code><code class="keyword">=</code><code class="plain">TOP, fill</code><code class="keyword">=</code><code class="plain">X)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>15</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>16</code></td><td class="content"><code class="comments"># il reste une cavité en bas à gauche...</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>17</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>18</code></td><td class="content"><code class="plain">frame3 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"red"</code><code class="plain">,&nbsp;&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>19</code></td><td class="content"><code class="plain">frame3.pack(side</code><code class="keyword">=</code><code class="plain">BOTTOM, fill</code><code class="keyword">=</code><code class="plain">BOTH, expand</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>20</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>21</code></td><td class="content"><code class="comments"># le frame suivant sera placé au-dessus du frame 3 !</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>22</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>23</code></td><td class="content"><code class="plain">frame4 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"green"</code><code class="plain">,&nbsp;&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">200</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">100</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>24</code></td><td class="content"><code class="plain">frame4.pack(fill</code><code class="keyword">=</code><code class="plain">NONE, expand</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>25</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>26</code></td><td class="content"><code class="plain">application.mainloop()</code></td></tr></tbody></table></div></div></div>
+
+<p>
+Nous obtenons ceci (avec une fenêtre que j'ai légèrement agrandie suivant
+l'axe des Y) :
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_05.png" class="middle" alt="">
+</p>
+
+<p>
+Nous avons dit à <b>frame4</b> de ne remplir aucune direction (fill=NONE) mais
+de quand même s'étendre (expand=1). Comme nous n'avons rien spécifié pour side, c'est par
+défaut l'option side=TOP qui est appliquée. De plus, <b>frame4</b> a ses propres
+dimensions bien définies (200 et 100), il n'y a donc aucune raison que le frame4
+de couleur verte s'étende quand on maximise la fenêtre principale. Voyons le dernier
+schéma pour bien comprendre :
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_06.png" class="middle" alt="">
+</p>
+
+<p>
+En fait, dans ce cas, c'est la cavité contenant <b>frame4</b> qui va s'étendre
+mais pas le frame4. La cavité restante est donc ici de nouveau réduite à sa superficie
+minimale, puisque la cavité précédente s'étend au plus possible.
+</p>
+
+<h2>3) Caractéristique importante de pack</h2>
+
+<p>Par rapport à ce qui a été exposé ci-dessus, vous pouvez déjà en déduire une caractéristique
+importante du Geometry Manager <b>pack()</b> : l'ordre dans lequel sont ajoutés les widgets
+à un même conteneur-parent a une grande importance.
+</p>
+
+<h2>4) Et on peut aller plus loin !</h2>
+
+<p>
+Une erreur fréquemment trouvée sur les forums consacrés à la programmation avec Tkinter
+consiste à dire que l'on ne peut utiliser qu'un seul Geometry Manager au sein d'une même application.
+C'est faux.
+</p>
+
+<p>
+La règle n'est donc pas celle-ci :<br>
+- <b>"Vous ne pouvez utiliser qu'un seul Geometry Manager dans une application."</b>
+<br>
+Mais elle est la suivante :<br>
+- <b>"Vous ne pouvez utiliser qu'un seul Geometry Manager dans un conteneur donné pour y placer ses enfants directs."</b>
+</p>
+
+<p>
+Illustrons cela en complétant notre exemple. Si on se concentre maintenant sur notre
+<b>frame1</b>, je peux décider d'y placer dedans des widgets (enfants directs) en
+utilisant cette fois-ci le Geometry Manager <b>grid</b>. La règle
+stipule donc qu'une fois que vous avez choisi Grid pour un conteneur donné, tous les enfants directs
+de ce conteneur devront être placés avec Grid.
+</p>
+
+<div id="highlighter_247854" class="syntaxhighlighter  "><div class="bar"><div class="toolbar"><a href="http://www.gigante.be/python/didact_002.php#viewSource" title="view source" class="item viewSource" style="width: 16px; height: 16px;">view source</a><div class="item copyToClipboard"><embed width="16" height="16" id="highlighter_247854_clipboard" type="application/x-shockwave-flash" title="copy to clipboard" allowscriptaccess="always" wmode="transparent" flashvars="highlighterId=highlighter_247854" menu="false" src="scripts/clipboard.swf"></div><a href="http://www.gigante.be/python/didact_002.php#printSource" title="print" class="item printSource" style="width: 16px; height: 16px;">print</a><a href="http://www.gigante.be/python/didact_002.php#about" title="?" class="item about" style="width: 16px; height: 16px;">?</a></div></div><div class="lines"><div class="line alt1"><table><tbody><tr><td class="number"><code>01</code></td><td class="content"><code class="comments">#!/usr/local/bin/python</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>02</code></td><td class="content"><code class="comments"># -*- coding:utf-8 -*-</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>03</code></td><td class="content"><code class="keyword">from</code> <code class="plain">Tkinter </code><code class="keyword">import</code> <code class="keyword">*</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>04</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>05</code></td><td class="content"><code class="plain">application </code><code class="keyword">=</code> <code class="plain">Tk()</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>06</code></td><td class="content"><code class="plain">application.title(</code><code class="string">"Pack testeur"</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>07</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>08</code></td><td class="content"><code class="plain">frame1 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"yellow"</code><code class="plain">, width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, padx</code><code class="keyword">=</code><code class="value">10</code><code class="plain">, pady</code><code class="keyword">=</code><code class="value">10</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>09</code></td><td class="content"><code class="plain">frame1.pack(side</code><code class="keyword">=</code><code class="plain">RIGHT,fill</code><code class="keyword">=</code><code class="plain">Y)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>10</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>11</code></td><td class="content"><code class="comments"># il reste la cavité sur la gauche...</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>12</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>13</code></td><td class="content"><code class="plain">frame2 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"blue"</code><code class="plain">,&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>14</code></td><td class="content"><code class="plain">frame2.pack(side</code><code class="keyword">=</code><code class="plain">TOP, fill</code><code class="keyword">=</code><code class="plain">X)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>15</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>16</code></td><td class="content"><code class="comments"># il reste une cavité en bas à gauche...</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>17</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>18</code></td><td class="content"><code class="plain">frame3 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"red"</code><code class="plain">,&nbsp;&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">300</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">150</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>19</code></td><td class="content"><code class="plain">frame3.pack(side</code><code class="keyword">=</code><code class="plain">BOTTOM, fill</code><code class="keyword">=</code><code class="plain">BOTH, expand</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>20</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>21</code></td><td class="content"><code class="comments"># le frame suivant sera placé au-dessus du frame 3 !</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>22</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>23</code></td><td class="content"><code class="plain">frame4 </code><code class="keyword">=</code> <code class="plain">Frame(application, bg</code><code class="keyword">=</code><code class="string">"green"</code><code class="plain">,&nbsp;&nbsp;&nbsp; width</code><code class="keyword">=</code><code class="value">200</code><code class="plain">, height</code><code class="keyword">=</code><code class="value">100</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>24</code></td><td class="content"><code class="plain">frame4.pack(side</code><code class="keyword">=</code><code class="plain">TOP, fill</code><code class="keyword">=</code><code class="plain">NONE, expand</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>25</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>26</code></td><td class="content"><code class="comments"># A l'intérieur du frame 1, si on décide d'utiliser grid, on peut le</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>27</code></td><td class="content"><code class="comments"># faire, mais on utilisera alors exclusivement grid pour les enfants</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>28</code></td><td class="content"><code class="comments"># directs placés dans frame1.</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>29</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>30</code></td><td class="content"><code class="plain">lab1 </code><code class="keyword">=</code> <code class="plain">Label(frame1, text</code><code class="keyword">=</code><code class="string">"label un"</code>&nbsp;&nbsp; <code class="plain">).grid(row</code><code class="keyword">=</code><code class="value">0</code><code class="plain">,column</code><code class="keyword">=</code><code class="value">0</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>31</code></td><td class="content"><code class="plain">ent1 </code><code class="keyword">=</code> <code class="plain">Entry(frame1).grid(row</code><code class="keyword">=</code><code class="value">0</code><code class="plain">,column</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>32</code></td><td class="content"><code class="plain">lab2 </code><code class="keyword">=</code> <code class="plain">Label(frame1, text</code><code class="keyword">=</code><code class="string">"label deux"</code> <code class="plain">).grid(row</code><code class="keyword">=</code><code class="value">1</code><code class="plain">,column</code><code class="keyword">=</code><code class="value">0</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>33</code></td><td class="content"><code class="plain">ent2 </code><code class="keyword">=</code> <code class="plain">Entry(frame1).grid(row</code><code class="keyword">=</code><code class="value">1</code><code class="plain">,column</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>34</code></td><td class="content"><code class="plain">lab3 </code><code class="keyword">=</code> <code class="plain">Label(frame1, text</code><code class="keyword">=</code><code class="string">"label trois"</code><code class="plain">).grid(row</code><code class="keyword">=</code><code class="value">2</code><code class="plain">,column</code><code class="keyword">=</code><code class="value">0</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>35</code></td><td class="content"><code class="plain">ent3 </code><code class="keyword">=</code> <code class="plain">Entry(frame1).grid(row</code><code class="keyword">=</code><code class="value">2</code><code class="plain">,column</code><code class="keyword">=</code><code class="value">1</code><code class="plain">)</code></td></tr></tbody></table></div><div class="line alt2"><table><tbody><tr><td class="number"><code>36</code></td><td class="content">&nbsp;</td></tr></tbody></table></div><div class="line alt1"><table><tbody><tr><td class="number"><code>37</code></td><td class="content"><code class="plain">application.mainloop()</code></td></tr></tbody></table></div></div></div>
+
+<p>
+Ce qui donne l'interface mixte suivante :
+</p>
+
+<p>
+<img src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/schema_07.png" class="middle" alt="">
+</p>
+
+
+<h2>5) Conclusion générale</h2>
+
+<p>
+C'est en jouant sur le remplissage de la notion de cavité restante, et en imbriquant
+des conteneurs intelligemment, tout en respectant la règle de rester dans un Geometry Manager
+donné pour chaque conteneur utilisé, que vous pourrez élaborer avec Tkinter des interfaces
+suffisemment complexes, et qui réagiront comme vous l'aurez planifié à la modification
+de la fenêtre principale par l'utilisateur.
+</p>
+
+<p>
+Voilà, j'espère que ce didacticiel aura permis aux débutants qui utilisent Tkinter
+de mieux comprendre Pack() et ainsi de l'utiliser plus rapidement et plus efficacement,
+pour constituer leurs interfaces utilisateurs en toute connaissance de cause.
+</p>
+
+<p><b>Calogero GIGANTE</b></p>
+
+        <p></p>
+
+				</div>
+			</div>
+			</div>
+			</div>
+
+
+		<div style="clear: both;">&nbsp;</div>
+		</div>
+		<!-- end #content -->
+		<div id="sidebar">
+    			<ul>
+				<li>
+					<h2>Python rocks !</h2>
+					<p>
+          <b>Python</b> est un langage de programmation multi-plateforme vraiment génial, à la fois simple et complexe, qui vaut
+          vraiment la peine d'y investir du temps.
+          </p>
+				</li>
+				<li>
+					<h2>Liens utiles</h2>
+					<ul>
+						<li><a href="http://www.python.org/" target="_blank">Python site web</a> (1)<span>Le site officiel</span></li>
+						<li><a href="http://www.pythonfrance.com/" target="_blank">Python France</a> (1)<span>Ressources libres en Python</span></li>
+						<li><a href="http://python.developpez.com/" target="_blank">Forum Python Developpez</a> (1)<span>Un vrai forum de pros</span> </li>
+						<li><a href="http://www.wxpython.org/" target="_blank">wxPython</a> (1)<span>La meilleure interface graphique</span> </li>
+					</ul>
+				</li>
+			</ul>		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	</div>
+	</div>
+	<!-- end #page -->
+</div>
+	<div id="footer">
+  		<p>Site v.007 - Copyright (c) GIGANTE. Tous droits réservés. Design graphique par <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+	</div>
+	<!-- end #footer -->
+
+<!-- fin de page -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./Didacticiel 002 _ comprendre le layout Pack dans les interfaces Tkinter - Calogero GIGANTE_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-6899523-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body></html>
